@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Entertainment Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --accent-movies: #ff4d6d;
+    --accent-music: #7b61ff;
+    --accent-podcasts: #00d4aa;
+    --accent-games: #ff9500;
+    --accent-docs: #00b4ff;
+    --affiliate-gold: #f5c842;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 40px 40px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .header-left {}
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(38px, 5vw, 64px);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 40%, var(--muted));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tagline {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
+
+  /* ── HERO AFFILIATE BANNER ── */
+  .hero-affiliate {
+    background: linear-gradient(135deg, #0e1a2e 0%, #0a1020 100%);
+    border: 1px solid rgba(245, 200, 66, 0.2);
+    border-radius: 12px;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 380px;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none;
+  }
+
+  .hero-affiliate:hover {
+    border-color: rgba(245, 200, 66, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .affiliate-shield {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+
+  .affiliate-text {}
+
+  .affiliate-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--affiliate-gold);
+    margin-bottom: 3px;
+  }
+
+  .affiliate-headline {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .affiliate-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .affiliate-cta {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: var(--affiliate-gold);
+    color: #0a0a0f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  /* ── NAV ── */
+  nav {
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-tab {
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    position: relative;
+    top: 1px;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+  }
+
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab[data-cat="movies"].active { border-bottom-color: var(--accent-movies); color: var(--accent-movies); }
+  .nav-tab[data-cat="music"].active { border-bottom-color: var(--accent-music); color: var(--accent-music); }
+  .nav-tab[data-cat="podcasts"].active { border-bottom-color: var(--accent-podcasts); color: var(--accent-podcasts); }
+  .nav-tab[data-cat="games"].active { border-bottom-color: var(--accent-games); color: var(--accent-games); }
+  .nav-tab[data-cat="docs"].active { border-bottom-color: var(--accent-docs); color: var(--accent-docs); }
+
+  /* ── PANELS ── */
+  .panel { display: none; padding: 36px 40px 60px; }
+  .panel.active { display: block; animation: fadeIn 0.35s ease both; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .panel-icon { font-size: 30px; line-height: 1; }
+
+  .panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 34px;
+    letter-spacing: 0.05em;
+  }
+
+  .panel-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ── INLINE AFFILIATE STRIP ── */
+  .affiliate-strip {
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .affiliate-strip:hover { transform: translateY(-1px); opacity: 0.92; }
+
+  .affiliate-strip.nord {
+    background: linear-gradient(135deg, #0d1b3e 0%, #061029 100%);
+    border: 1px solid rgba(89, 150, 246, 0.25);
+  }
+
+  .affiliate-strip.audible {
+    background: linear-gradient(135deg, #1a1200 0%, #120d00 100%);
+    border: 1px solid rgba(255, 168, 0, 0.25);
+  }
+
+  .affiliate-strip.skillshare {
+    background: linear-gradient(135deg, #001a14 0%, #000f0a 100%);
+    border: 1px solid rgba(0, 212, 170, 0.25);
+  }
+
+  .strip-icon { font-size: 24px; flex-shrink: 0; }
+
+  .strip-body { flex: 1; }
+
+  .strip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+
+  .nord .strip-label { color: #5996f6; }
+  .audible .strip-label { color: #ffa800; }
+  .skillshare .strip-label { color: var(--accent-podcasts); }
+
+  .strip-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .strip-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .strip-btn {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .nord .strip-btn { background: #5996f6; color: #fff; }
+  .audible .strip-btn { background: #ffa800; color: #000; }
+  .skillshare .strip-btn { background: var(--accent-podcasts); color: #000; }
+
+  .affiliate-disclaimer {
+    font-size: 10px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 20px;
+    opacity: 0.6;
+  }
+
+  /* ── SOURCE GRID ── */
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 14px;
+  }
+
+  .source-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s, transform 0.2s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .source-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 12px 12px 0 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .source-card:hover { transform: translateY(-2px); background: var(--surface2); }
+  .source-card:hover::before { opacity: 1; }
+
+  [data-cat="movies"] .source-card::before { background: var(--accent-movies); }
+  [data-cat="music"] .source-card::before { background: var(--accent-music); }
+  [data-cat="podcasts"] .source-card::before { background: var(--accent-podcasts); }
+  [data-cat="games"] .source-card::before { background: var(--accent-games); }
+  [data-cat="docs"] .source-card::before { background: var(--accent-docs); }
+
+  [data-cat="movies"] .source-card:hover { border-color: rgba(255,77,109,0.25); }
+  [data-cat="music"] .source-card:hover { border-color: rgba(123,97,255,0.25); }
+  [data-cat="podcasts"] .source-card:hover { border-color: rgba(0,212,170,0.25); }
+  [data-cat="games"] .source-card:hover { border-color: rgba(255,149,0,0.25); }
+  [data-cat="docs"] .source-card:hover { border-color: rgba(0,180,255,0.25); }
+
+  .source-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .source-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .source-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .source-best {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
+
+  .bookmarks-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+
+  .bookmarks { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .bookmark-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: all;
+  }
+
+  .bookmark-tag:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+  .bookmark-tag.copied { background: rgba(0,212,100,0.12); border-color: rgba(0,212,100,0.3); color: #00d464; }
+
+  .visit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: opacity 0.15s;
+    opacity: 0.6;
+  }
+
+  .visit-link:hover { opacity: 1; }
+
+  [data-cat="movies"] .visit-link { color: var(--accent-movies); }
+  [data-cat="music"] .visit-link { color: var(--accent-music); }
+  [data-cat="podcasts"] .visit-link { color: var(--accent-podcasts); }
+  [data-cat="games"] .visit-link { color: var(--accent-games); }
+  [data-cat="docs"] .visit-link { color: var(--accent-docs); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-note {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    max-width: 500px;
+    line-height: 1.5;
+  }
+
+  .footer-note a { color: var(--muted); }
+
+  .copy-hint {
+    font-size: 11px;
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+    margin-top: 24px;
+    opacity: 0.5;
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 600px) {
+    header, nav, .panel, footer { padding-left: 20px; padding-right: 20px; }
+    header { flex-direction: column; align-items: flex-start; }
+    .hero-affiliate { max-width: 100%; }
+    .affiliate-cta { display: none; }
+    .sources-grid { grid-template-columns: 1fr; }
+    .strip-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER + HERO AFFILIATE -->
+<header>
+  <div class="header-left">
+    <div class="logo">Free Entertainment Hub</div>
+    <div class="tagline">100% free · 100% legal · zero subscriptions required</div>
+  </div>
+  <div class="hero-affiliate" style="cursor:default; border-color: rgba(255,255,255,0.08);">
+    <div class="affiliate-shield">🛡️</div>
+    <div class="affiliate-text">
+      <div class="affiliate-eyebrow" style="color: var(--muted);">Coming Soon</div>
+      <div class="affiliate-headline" style="color: var(--muted);">Recommended tools & services</div>
+      <div class="affiliate-sub">Handpicked recommendations on their way</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-tab active" data-cat="movies">🎬 Movies & TV</button>
+  <button class="nav-tab" data-cat="music">🎵 Music & Radio</button>
+  <button class="nav-tab" data-cat="podcasts">🎙️ Podcasts & Audiobooks</button>
+  <button class="nav-tab" data-cat="games">🎮 Games & Interactive</button>
+  <button class="nav-tab" data-cat="docs">🎓 Docs & Education</button>
+</nav>
+
+<!-- MOVIES PANEL -->
+<div id="movies" class="panel active" data-cat="movies">
+  <div class="panel-header">
+    <div class="panel-icon">🎬</div>
+    <div>
+      <div class="panel-title">Movies & TV</div>
+      <div class="panel-subtitle">Free, ad-supported & public domain streaming</div>
+    </div>
+  </div>
+
+  <div class="affiliate-strip nord" style="cursor:default; opacity:0.4;">
+    <div class="strip-icon">🌍</div>
+    <div class="strip-body">
+      <div class="strip-label" style="color: var(--muted);">Coming Soon</div>
+      <div class="strip-title">VPN recommendation on its way</div>
+      <div class="strip-desc">We only recommend tools we genuinely trust — stay tuned.</div>
+    </div>
+  </div>
+
+  <div class="sources-grid" id="movies-grid"></div>
+  <p class="copy-hint">Click any search term to copy it to your clipboard</p>
+</div>
+
+<!-- MUSIC PANEL -->
+<div id="music" class="panel" data-cat="music">
+  <div class="panel-header">
+    <div class="panel-icon">🎵</div>
+    <div>
+      <div class="panel-title">Music & Radio</div>
+      <div class="panel-subtitle">Stream, discover, and broadcast-quality radio</div>
+    </div>
+  </div>
+  <div class="sources-grid" id="music-grid"></div>
+  <p class="copy-hint">Click any search term to copy it to your clipboard</p>
+</div>
+
+<!-- PODCASTS PANEL -->
+<div id="podcasts" class="panel" data-cat="podcasts">
+  <div class="panel-header">
+    <div class="panel-icon">🎙️</div>
+    <div>
+      <div class="panel-title">Podcasts & Audiobooks</div>
+      <div class="panel-subtitle">Words for your ears, no cost required</div>
+    </div>
+  </div>
+
+  <div class="affiliate-strip audible" style="cursor:default; opacity:0.4;">
+    <div class="strip-icon">🎧</div>
+    <div class="strip-body">
+      <div class="strip-label" style="color: var(--muted);">Coming Soon</div>
+      <div class="strip-title">Audiobook recommendation on its way</div>
+      <div class="strip-desc">We only recommend services we genuinely trust — stay tuned.</div>
+    </div>
+  </div>
+
+  <div class="sources-grid" id="podcasts-grid"></div>
+  <p class="copy-hint">Click any search term to copy it to your clipboard</p>
+</div>
+
+<!-- GAMES PANEL -->
+<div id="games" class="panel" data-cat="games">
+  <div class="panel-header">
+    <div class="panel-icon">🎮</div>
+    <div>
+      <div class="panel-title">Games & Interactive</div>
+      <div class="panel-subtitle">Browser games, puzzles, and free-to-play</div>
+    </div>
+  </div>
+  <div class="sources-grid" id="games-grid"></div>
+  <p class="copy-hint">Click any search term to copy it to your clipboard</p>
+</div>
+
+<!-- DOCS PANEL -->
+<div id="docs" class="panel" data-cat="docs">
+  <div class="panel-header">
+    <div class="panel-icon">🎓</div>
+    <div>
+      <div class="panel-title">Documentaries & Education</div>
+      <div class="panel-subtitle">Knowledge is the best free content</div>
+    </div>
+  </div>
+
+  <div class="affiliate-strip skillshare" style="cursor:default; opacity:0.4;">
+    <div class="strip-icon">✏️</div>
+    <div class="strip-body">
+      <div class="strip-label" style="color: var(--muted);">Coming Soon</div>
+      <div class="strip-title">Learning platform recommendation on its way</div>
+      <div class="strip-desc">We only recommend services we genuinely trust — stay tuned.</div>
+    </div>
+  </div>
+
+  <div class="sources-grid" id="docs-grid"></div>
+  <p class="copy-hint">Click any search term to copy it to your clipboard</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-note">
+    * Some links on this page are affiliate links. If you click and make a purchase, we may earn a small commission at no extra cost to you. This helps keep the site free. We only recommend services we genuinely think are useful.
+  </p>
+</footer>
+
+<script>
+const DATA = {
+  movies: [
+    { name: "Tubi", url: "https://tubitv.com", badge: "Ad-supported", best: "Massive free library of films and TV across every genre — horror, indie, drama, cult classics, and international cinema.", bookmarks: ["tubi free horror movies", "tubi 90s cult classics", "tubi international films", "tubi free anime"] },
+    { name: "Pluto TV", url: "https://pluto.tv", badge: "Live + VOD", best: "250+ live channels and a huge VOD library. Great for background TV, news, nostalgia channels, and reality shows.", bookmarks: ["pluto tv live channels", "pluto tv classic movies", "pluto tv reality tv"] },
+    { name: "Kanopy", url: "https://kanopy.com", badge: "Library card", best: "Premium indie films, documentaries, and classics — completely free with a public library card. Criterion Collection included.", bookmarks: ["kanopy criterion collection", "kanopy award winning films", "kanopy foreign films"] },
+    { name: "Internet Archive", url: "https://archive.org/details/movies", badge: "Public Domain", best: "Public domain films, classic Hollywood, serials, shorts, and silent films. Golden age cinema at its purest.", bookmarks: ["archive.org classic Hollywood films", "archive.org public domain 1950s", "archive.org silent films"] },
+    { name: "Peacock Free", url: "https://peacocktv.com", badge: "Free tier", best: "NBC shows, news, classic TV series, and select movies without a subscription. Free tier is surprisingly deep.", bookmarks: ["peacock free movies no subscription", "peacock free nbc shows", "peacock classic TV free"] },
+    { name: "Plex", url: "https://watch.plex.tv", badge: "Ad-supported", best: "300+ free live TV channels plus a large VOD library. Great for news, sports highlights, and general entertainment.", bookmarks: ["plex free movies no account", "plex live TV channels", "plex free documentaries"] },
+    { name: "YouTube Movies", url: "https://youtube.com/movies", badge: "Free + Rent", best: "Hundreds of free, ad-supported films available directly on YouTube — includes major studio releases.", bookmarks: ["youtube free movies full length", "youtube movies free with ads"] },
+    { name: "Crackle", url: "https://crackle.com", badge: "Ad-supported", best: "Sony-backed free streaming with original series, action films, thrillers, and comedies. No account needed.", bookmarks: ["crackle free movies", "crackle original series", "crackle action movies"] }
+  ],
+  music: [
+    { name: "YouTube Music", url: "https://music.youtube.com", badge: "Ad-supported", best: "Virtually unlimited music streaming. Free tier includes radio, playlists, and all official music videos with ads.", bookmarks: ["youtube music free playlist", "youtube lo-fi hip hop radio", "youtube jazz music free stream"] },
+    { name: "SoundCloud", url: "https://soundcloud.com", badge: "Free tier", best: "Best platform for discovering indie artists, bedroom producers, remixes, and underground scenes before they blow up.", bookmarks: ["soundcloud indie artists 2025", "soundcloud underground hip hop", "soundcloud ambient free stream"] },
+    { name: "Bandcamp", url: "https://bandcamp.com", badge: "Free streams", best: "Full album streams before you buy. Incredible for indie, metal, jazz, and experimental music. Artist-first platform.", bookmarks: ["bandcamp free music stream", "bandcamp name your price", "bandcamp indie jazz albums"] },
+    { name: "BBC Sounds", url: "https://bbc.co.uk/sounds", badge: "Live + Archive", best: "World-class live radio — Radio 1 (pop), Radio 2 (classics), Radio 3 (classical), Radio 6 (indie). Global access.", bookmarks: ["bbc radio 6 music live", "bbc radio 3 classical live", "bbc sounds radio archive"] },
+    { name: "Radio Garden", url: "https://radio.garden", badge: "Live Radio", best: "Spin a globe and listen to live radio from any city on Earth. Unmatched for discovering world music and culture.", bookmarks: ["radio garden live world radio", "radio.garden explore cities"] },
+    { name: "Free Music Archive", url: "https://freemusicarchive.org", badge: "Download OK", best: "Curated library of Creative Commons licensed music. Safe to use, download, and share legally.", bookmarks: ["free music archive creative commons", "FMA ambient music download", "FMA jazz royalty free"] },
+    { name: "Mixcloud", url: "https://mixcloud.com", badge: "Free tier", best: "DJ mixes, radio shows, and long-form listening sets. Perfect for electronic music, house, techno, and genre deep dives.", bookmarks: ["mixcloud deep house mix free", "mixcloud jazz radio show", "mixcloud afrobeats DJ set"] }
+  ],
+  podcasts: [
+    { name: "Spotify Podcasts", url: "https://open.spotify.com/genre/podcasts-page", badge: "Free tier", best: "Largest podcast catalogue in the world including exclusives. Free tier has full podcast access — no subscription needed.", bookmarks: ["spotify best true crime podcasts", "spotify history podcasts free", "spotify comedy podcasts 2025"] },
+    { name: "Apple Podcasts", url: "https://podcasts.apple.com", badge: "100% Free", best: "The original podcast directory. Every podcast ever made is basically here. No account required to browse and play.", bookmarks: ["apple podcasts top charts", "apple podcasts science category", "apple podcasts new and noteworthy"] },
+    { name: "Pocket Casts Web", url: "https://play.pocketcasts.com", badge: "Free web", best: "Slick, ad-free podcast player free on the web. Great for discovering curated new shows without an app.", bookmarks: ["pocket casts top podcasts", "pocket casts recommended shows"] },
+    { name: "LibriVox", url: "https://librivox.org", badge: "Public Domain", best: "Free audiobooks of public domain books read by volunteers. Thousands of classics including Dickens, Tolstoy, Austen.", bookmarks: ["librivox free audiobooks classics", "librivox charles dickens", "librivox jane austen audiobook"] },
+    { name: "Project Gutenberg", url: "https://gutenberg.org/ebooks/search/?query=audio", badge: "Public Domain", best: "70,000+ free ebooks, many with human- or computer-narrated audio. The definitive public domain library.", bookmarks: ["project gutenberg free audiobooks", "gutenberg classic novels audio", "gutenberg shakespeare free"] },
+    { name: "Open Culture", url: "https://openculture.com/freeaudiobooks", badge: "Curated", best: "Curated list of 1,000+ free legal audiobooks from across the internet. Great editorial picks across every genre.", bookmarks: ["open culture free audiobooks list", "openculture.com audiobooks 2025"] }
+  ],
+  games: [
+    { name: "itch.io Free", url: "https://itch.io/games/price/free", badge: "Browser + Download", best: "Thousands of free indie games — browser-playable or downloadable. From pixel RPGs to experimental art games.", bookmarks: ["itch.io free browser games", "itch.io free horror games", "itch.io top rated free"] },
+    { name: "CrazyGames", url: "https://crazygames.com", badge: "Browser", best: "High quality browser games across all genres — racing, puzzle, shooting, multiplayer. No download needed.", bookmarks: ["crazygames multiplayer free", "crazygames puzzle games", "crazygames io games"] },
+    { name: "Poki", url: "https://poki.com", badge: "Browser", best: "Curated library of browser games, well-organized by genre. Very clean, safe, and fast — great selection.", bookmarks: ["poki free games no download", "poki adventure games", "poki two player games"] },
+    { name: "Chess.com", url: "https://chess.com/play/online", badge: "Free tier", best: "World's best chess platform. Free tier includes unlimited games, puzzles, and lessons. Play humans or AI.", bookmarks: ["chess.com play online free", "chess puzzles daily free", "chess.com learn free"] },
+    { name: "NYT Games", url: "https://nytimes.com/games", badge: "Partially free", best: "Wordle is fully free. Connections, Mini Crossword, and Spelling Bee are free daily — no subscription needed.", bookmarks: ["nyt wordle today", "nyt connections daily game", "nyt spelling bee free", "nyt mini crossword free"] },
+    { name: "Steam Free-to-Play", url: "https://store.steampowered.com/genre/Free%20to%20Play/", badge: "Download", best: "Hundreds of legitimately free PC games including massive titles like Dota 2, Path of Exile, and Warframe.", bookmarks: ["steam free to play top rated", "steam free games 2025 best", "steam F2P multiplayer"] },
+    { name: "Lichess", url: "https://lichess.org", badge: "100% Free", best: "Fully open-source chess platform — completely free forever with no ads. Includes analysis, puzzles, and tournaments.", bookmarks: ["lichess free chess online", "lichess puzzles daily", "lichess tournaments free"] },
+    { name: "Archive Games", url: "https://archive.org/details/software?and[]=subject%3A%22game%22", badge: "Browser", best: "Play classic DOS, arcade, and console games directly in your browser. Massive historical gaming library.", bookmarks: ["archive.org classic DOS games browser", "archive.org arcade games free"] }
+  ],
+  docs: [
+    { name: "YouTube EDU", url: "https://youtube.com/@TED", badge: "Free", best: "The world's largest free education platform. Veritasium, Kurzgesagt, PBS, and TED cover every subject brilliantly.", bookmarks: ["youtube best documentary 2025", "youtube educational channels best", "youtube full documentary free", "kurzgesagt youtube", "veritasium youtube"] },
+    { name: "Khan Academy", url: "https://khanacademy.org", badge: "100% Free", best: "World-class courses in math, science, history, and computing. Completely free, forever. Great for structured learning.", bookmarks: ["khan academy free courses", "khan academy science lessons", "khan academy math free"] },
+    { name: "Coursera Audit", url: "https://coursera.org", badge: "Audit free", best: "Audit any course from MIT, Stanford, Yale for free. Watch all lectures without paying for a certificate.", bookmarks: ["coursera audit free courses", "coursera free no certificate", "coursera MIT free lectures"] },
+    { name: "Documentary Heaven", url: "https://documentaryheaven.com", badge: "Free", best: "Huge curated library of free documentaries organized by topic — nature, history, society, science.", bookmarks: ["documentary heaven nature docs", "documentary heaven history free", "documentary heaven top rated"] },
+    { name: "Top Documentary Films", url: "https://topdocumentaryfilms.com", badge: "Free", best: "Aggregates the best free documentaries on the web, ranked and categorized. Great discovery engine.", bookmarks: ["top documentary films science", "top documentary films history", "topdocumentaryfilms.com best rated"] },
+    { name: "MIT OpenCourseWare", url: "https://ocw.mit.edu", badge: "100% Free", best: "Full MIT course materials — lectures, notes, assignments, exams — for 2,500+ courses. Genuinely university-level.", bookmarks: ["MIT opencourseware free lectures", "MIT OCW computer science", "MIT open course physics free"] },
+    { name: "PBS Watch", url: "https://pbs.org/watch", badge: "Free", best: "NOVA, Frontline, Ken Burns documentaries, American Experience — all freely available online with minimal ads.", bookmarks: ["pbs nova documentary free", "pbs frontline full episodes free", "pbs ken burns documentary"] },
+    { name: "Smithsonian YouTube", url: "https://youtube.com/@SmithsonianChannel", badge: "Free", best: "Nature, science, history, and culture documentaries from the world's most trusted museum network.", bookmarks: ["smithsonian channel youtube free docs", "smithsonian documentary history youtube"] }
+  ]
+};
+
+function copyToClipboard(text, el) {
+  navigator.clipboard.writeText(text).then(() => {
+    el.classList.add('copied');
+    el.textContent = '✓ copied';
+    setTimeout(() => { el.classList.remove('copied'); el.textContent = text; }, 1500);
+  });
+}
+
+function renderGrid(category, containerId) {
+  const container = document.getElementById(containerId);
+  DATA[category].forEach(source => {
+    const card = document.createElement('div');
+    card.className = 'source-card';
+    const tags = source.bookmarks.map(b =>
+      `<span class="bookmark-tag" onclick="copyToClipboard('${b.replace(/'/g,"\\'")}', this)">${b}</span>`
+    ).join('');
+    card.innerHTML = `
+      <div class="source-top">
+        <div class="source-name">${source.name}</div>
+        <span class="source-badge">${source.badge}</span>
+      </div>
+      <div class="source-best">${source.best}</div>
+      <div class="bookmarks-label">Save these searches</div>
+      <div class="bookmarks">${tags}</div>
+      <a class="visit-link" href="${source.url}" target="_blank" rel="noopener">Visit → ${new URL(source.url).hostname.replace('www.','')}</a>
+    `;
+    container.appendChild(card);
+  });
+}
+
+['movies','music','podcasts','games','docs'].forEach(cat => renderGrid(cat, `${cat}-grid`));
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.cat).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
